@@ -57,7 +57,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('/instance/{id}', 'destroy')->name('instance.destroy');
         Route::put('/endorse/{id}/instance', 'endorse')->name('instance.endorse');
         Route::get('/instance/scan', 'scan')->name('scan.barcode');
-        Route::get('/teacher/endorsement', 'endorsement')->name('teacher.endorsement');
     });
 
     //UsersProfileController
@@ -119,6 +118,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('scan', ScanController::class);
     });
 });
-
 
 require __DIR__ . '/auth.php';

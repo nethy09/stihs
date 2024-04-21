@@ -94,7 +94,7 @@
                                     ?>
 
                                     <td>{!! $html !!}
-                                        SN:{{ $instance->serial_number}}</td>
+                                        {{ $instance->serial_number}}</td>
 
                                     <td>{{$instance->status}}</td>
                                     <td>

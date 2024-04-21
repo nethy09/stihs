@@ -30,18 +30,30 @@ class ItemController extends Controller
 
     public function store(Request $request)
     {
-        $item = Item::create([
-            'item_image' => public_path('/backend/assets/images/'),
-            'category_id' => $request->category_name,
-            'item_name' => $request->item_name,
-            'item_description' => $request->item_description,
-            'item_specification' => $request->item_specification,
-            'old_property_number' => $request->old_property_number,
-            'new_property_number' => $request->new_property_number,
-            'unit_measure' => $request->unit_measure,
-            'source_id' => $request->source,
-            'date_acquired' => $request->date_acquired,
-        ]);
+
+        if (!empty($request->category_name)) {
+            $item = Item::create([
+                'category_id' => $request->category_name,
+                'item_name' => $request->item_name,
+                'item_description' => $request->item_description,
+                'item_specification' => $request->item_specification,
+                'old_property_number' => $request->old_property_number,
+                'new_property_number' => $request->new_property_number,
+                'unit_measure' => $request->unit_measure,
+                'source_id' => $request->source,
+                'date_acquired' => $request->date_acquired,
+            ]);
+        } else {
+        }
+
+        if ($request->hasFile('item_image')) {
+            $image = $request->file('item_image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('backend/item-images/'), $imageName);
+
+            $item->item_image = 'backend/item-images/' . $imageName;
+            $item->save();
+        }
 
         // Quantity is the number of items to be added //
         for ($i = 1; $i <= $request->quantity; $i++) {
@@ -57,11 +69,6 @@ class ItemController extends Controller
                     'item_name' => $request->item_name,
                 ])
             ]);
-
-            if ($request->hasFile('item_image')) {
-                $filename = $request->getSchemeAndHttpHost() . '/backend/assets/images/' . time() . '.' . $request->images->extension();
-                $request->images->move(public_path('/backend/assets/images/'), $filename);
-            }
         }
 
         return redirect()->back()->with('success', 'Item added successfully');
