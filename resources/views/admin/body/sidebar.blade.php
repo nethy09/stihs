@@ -129,7 +129,7 @@
 
 
                     </ul>
-                @elseif (auth()->user()->usertype == 'User')
+                @elseif (auth()->user()->usertype == 'User' || auth()->user()->usertype == 'Teacher')
                     <ul class="metismenu list-unstyled" id="side-menu"> <br><br>
                         <li>
                             <a href="{{ route('dashboard') }}" class="waves-effect" style="color: white;">
@@ -147,12 +147,12 @@
                             </a>
                         </li>
 
-                        {{-- <li>
-                            <a href="{{ route('instance.index') }}" class="waves-effect" style="color: white;">
+                        <li>
+                            <a href="{{ route('instance.index', auth()->user()->id) }}" class="waves-effect" style="color: white;">
                                 <i class="ri-dashboard-line"></i>
                                 <span>Item Endorsed</span>
                             </a>
-                        </li> --}}
+                        </li>
 
                         <li>
                             <a href="{{ route('form.index') }}" class="waves-effect" style="color: white;">

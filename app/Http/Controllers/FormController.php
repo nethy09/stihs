@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\form;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class FormController extends Controller
@@ -12,48 +13,44 @@ class FormController extends Controller
      */
     public function index()
     {
-        $form = Form::all();
-
-        return view('form.index', compact('form'));
+        if (auth()->user()->usertype === 'Property Custodian' || auth()->user()->usertype === 'Admin') {
+            $users = User::whereHas('forms')->with('forms')->get();
+        } elseif (auth()->user()->usertype === 'User' || auth()->user()->usertype === 'Teacher') {
+            $users = User::where('id', auth()->id())->whereHas('forms')->with('forms')->get();
+        } else {
+            return redirect()->back()->with('error', 'You are not authorized to view this page.');
+        }
+        return view('form.index', compact('users'));
     }
 
-
-    public function Form(Request $request)
+    public function store(Request $request)
     {
-        // Validate the form data
-        $validatedData = $request->validate([
-            'item_name' => 'required',
-            'quantity' => 'required|integer',
-            // Add more validation rules as needed
+        $request->validate([
+            'item_name.*' => 'required', // Use dot notation to validate array fields
+            'quantity.*' => 'required',
+            'purpose' => 'required',
         ]);
 
-        // Create a new instance of the Form model
-        $form = new Form();
+        $itemNames = $request->item_name;
+        $quantities = $request->quantity;
+        $purpose = $request->purpose;
 
-        // Fill the model with the validated form data
-        $form->item_name = $validatedData['item_name'];
-        $form->quantity = $validatedData['quantity'];
-        // Add more fields as needed
+        // Validate that the number of item names matches the number of quantities
+        if (count($itemNames) !== count($quantities)) {
+            return redirect()->back()->withErrors(['error' => 'Item names and quantities must have the same number of entries.'])->withInput();
+        }
 
-        // Save the form data to the database
-        $form->save();
+        foreach ($itemNames as $index => $itemName) {
+            $quantity = $quantities[$index];
 
-        // Redirect back to the form index page with a success message
-        return redirect()->route('form.index')->with('success', 'Form submitted successfully!');
+            $form = new Form();
+            $form->item_name = $itemName;
+            $form->quantity = $quantity;
+            $form->purpose = $purpose;
+            $form->user_id = auth()->id();
+            $form->save();
+        }
+
+        return redirect()->back()->with('success', 'Forms created successfully.');
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

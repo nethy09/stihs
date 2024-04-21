@@ -37,6 +37,18 @@ class UserSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => Hash::make('janeth'),
         ]);
+
+        DB::table('users')->insert([
+            'id' => (time() - 999999997),
+            'last_name' => 'Ongaria',
+            'first_name' => 'Gladys',
+            'middle_initial' => 'B',
+            'usertype' => 'Teacher',
+            'department_id' => 2,
+            'email' => 'gladys@gmail.com',
+            'email_verified_at' => now(),
+            'password' => Hash::make('gladys'),
+        ]);
     }
 
     public function down(): void

@@ -27,9 +27,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('admin.index');
     })->name('dashboard');
 
-
-
-
     Route::controller(AdminController::class)->group(function () {
         Route::get('/admin/logout', 'destroy')->name('admin.logout');
         Route::get('/admin/profile', 'profile')->name('admin.profile');
@@ -60,6 +57,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('/instance/{id}', 'destroy')->name('instance.destroy');
         Route::put('/endorse/{id}/instance', 'endorse')->name('instance.endorse');
         Route::get('/instance/scan', 'scan')->name('scan.barcode');
+        Route::get('/teacher/endorsement', 'endorsement')->name('teacher.endorsement');
     });
 
     //UsersProfileController
@@ -102,7 +100,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     //IndividualController
     Route::controller(IndividualController::class)->prefix('individual')->group(function () {
         Route::resource('individual', IndividualController::class);
-
         Route::put('/monitor/{id}', 'monitor')->name('individual.monitor');
     });
 
@@ -112,15 +109,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/individual/{id}/monitoring', 'print')->name('individual.print');
     });
 
-     //FormController
-     Route::controller(FormController::class)->prefix('form')->group(function () {
+    //FormController
+    Route::controller(FormController::class)->prefix('form')->group(function () {
         Route::resource('form', FormController::class);
     });
+
     //ScanController
     Route::controller(ScanController::class)->prefix('scan')->group(function () {
         Route::resource('scan', ScanController::class);
-});
-
+    });
 });
 
 

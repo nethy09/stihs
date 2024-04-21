@@ -116,24 +116,19 @@
                                     $html = DNS1D::getBarcodeHTML($serialNumberDigits, 'EAN13', 1, 30);
                                     ?>
 
-                                    <td>{!! $html !!}
-                                        SN:{{$instance->serial_number}}</td>
+                                            <td>{!! $html !!}
+                                                {{$instance->serial_number}}</td>
 
                                             <td>{{$instance->status}}</td>
                                             <td>
-                                                <button type="button"
-                                                class="ri-edit-line"
-                                                    data-bs-toggle="modal"
+                                                <button type="button" class="ri-edit-line" data-bs-toggle="modal"
                                                     data-bs-target="#edit{{ $instance->id }}"></button>
 
-                                                <button type="button"
-                                                class="ri-user-shared-line"
-                                                    data-bs-toggle="modal"
+                                                <button type="button" class="ri-user-shared-line" data-bs-toggle="modal"
                                                     data-bs-target="#endorse{{ $instance->id }}"></button>
 
 
-                                                <button type="button"
-                                                class="ri-delete-bin-6-line"
+                                                <button type="button" class="ri-delete-bin-6-line"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#delete{{ $instance->id }}"></button>
                                             </td>
@@ -206,19 +201,17 @@
                                                 $html = DNS1D::getBarcodeHTML($serialNumberDigits, 'EAN13', 1, 30);
                                                 ?>
 
-                                                {!! $html !!}
-                                                    SN:{{$instance->serial_number}}</td>
+                                            <td> {!! $html !!}
+                                                {{$instance->serial_number}}</td>
 
-                                            <td>{{$instance->user->first_name}} {{$instance->user->middle_initial}}. {{$instance->user->last_name}}</td>
+                                            <td>{{$instance->user->first_name}} {{$instance->user->middle_initial}}.
+                                                {{$instance->user->last_name}}</td>
                                             <td>{{$instance->status}}</td>
                                             <td>
-                                                <button type="button"
-                                                class="ri-edit-line"
-                                                    data-bs-toggle="modal"
+                                                <button type="button" class="ri-edit-line" data-bs-toggle="modal"
                                                     data-bs-target="#edit{{ $instance->id }}"></button>
 
-                                                <button type="button"
-                                                class="ri-delete-bin-6-line"
+                                                <button type="button" class="ri-delete-bin-6-line"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#delete{{ $instance->id }}"></button>
                                             </td>
@@ -311,7 +304,7 @@
                                         @foreach ($pendingItemInstances as $instance)
                                         <tr>
                                             <td>{!!DNS1D::getBarcodeHTML("$instance->serial_number",'C39',1,30)!!}
-                                                p-{{$instance->serial_number}} </td>
+                                                {{$instance->serial_number}} </td>
                                             <td>{{$instance->status}}</td>
                                         </tr>
                                         @endforeach
@@ -336,8 +329,9 @@
                                         @foreach ($endorsedItemInstances as $instance)
                                         <tr>
                                             <td>{!!DNS1D::getBarcodeHTML("$instance->serial_number",'C39',1,30)!!}
-                                                p-{{$instance->serial_number}} </td>
-                                            <td>{{$instance->user->first_name}} {{$instance->user->middle_initial}}. {{$instance->user->last_name}}</td>
+                                                {{$instance->serial_number}} </td>
+                                            <td>{{$instance->user->first_name}} {{$instance->user->middle_initial}}.
+                                                {{$instance->user->last_name}}</td>
                                             <td>{{$instance->status}}</td>
                                         </tr>
                                         @endforeach
@@ -350,7 +344,7 @@
             </div> <!-- end col -->
         </div>
 
-        @elseif (auth()->user()->usertype == 'User')
+        @elseif (auth()->user()->usertype == 'User' || auth()->user()->usertype == 'Teacher')
 
         <div class="row">
             <div class="col-12">
@@ -376,7 +370,6 @@
                                     <thead>
                                         <tr>
                                             <th>Serial Number</th>
-                                            <th>Endorsed To</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
@@ -385,57 +378,8 @@
                                         @foreach ($endorsedItemInstances as $instance)
                                         <tr>
                                             <td>{!!DNS1D::getBarcodeHTML("$instance->serial_number",'C39',1,30)!!}
-                                                p-{{$instance->serial_number}} </td>
-                                            <td>{{$instance->user->first_name}} {{$instance->user->middle_initial}}. {{$instance->user->last_name}}</td>
+                                                {{$instance->serial_number}} </td>
                                             <td>{{$instance->status}}</td>
-                                            <td>
-                                                <button type="button"
-                                                class="ri-edit-line"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#edit{{ $instance->id }}"></button>
-
-                                                <button type="button"
-                                                class="ri-delete-bin-6-line"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#delete{{ $instance->id }}"></button>
-                                            </td>
-
-                                            @include('items.instances.edit')
-                                            @include('items.instances.endorse')
-
-                                            {{-- Delete Modal --}}
-
-                                            <div class="modal fade" id="delete{{ $instance->id }}" tabindex="-1"
-                                                role="dialog" aria-labelledby="delete{{ $instance->id }}Label"
-                                                aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="delete{{ $instance->id }}Label">
-                                                                Delete
-                                                                Instance</h5>
-                                                            <button type="button" class="btn-close"
-                                                                data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <p>Are you sure you want to delete
-                                                                {{$instance->serial_number}}?</p>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                data-bs-dismiss="modal">Cancel</button>
-                                                            <form
-                                                                action="{{ route('instance.destroy', $instance->id) }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit"
-                                                                    class="btn btn-danger">Delete</button>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </tr>
                                         @endforeach
                                     </tbody>

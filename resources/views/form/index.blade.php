@@ -48,12 +48,16 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">SUPPLY REQUEST FORM</h4>
+                    <h4 class="mb-sm-0">SUPPLY REQUESTS</h4>
+                    <button data-bs-toggle="modal" data-bs-target="#form"
+                    class="btn btn-sm btn-outline-primary waves-effect waves-light">Request Supply</button>
                 </div>
             </div>
         </div>
         <!-- end page title -->
+
         @include('form.create')
+
         <div class="row">
             <div class="col-xl-6">
                 <div class="card" style="width: 200%;">
@@ -68,13 +72,16 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($form as $user)
+                                @foreach($users as $user)
                                 <tr>
                                     <td>{{ $user->first_name }} {{ $user->middle_initial}}. {{ $user->last_name }}</td>
                                     <td>{{ $user->usertype }}</td>
                                     <td>{{ $user->email }}</td>
                                     <td>
-                                        <a href="{{ route('form.index', $item->id) }}" class="ri-eye-line" style="display: inline-block; font-size: 24px;"></a>
+                                            <button data-bs-toggle="modal" data-bs-target="#formShow{{$user->id}}"
+                                            class="btn btn-sm btn-outline-primary waves-effect waves-light">View</button>
+
+                                            @include('form.show')
                                     </td>
                                 </tr>
                                 @endforeach

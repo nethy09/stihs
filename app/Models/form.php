@@ -5,12 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class form extends Model
+class Form extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'item_image',
+        'user_id',
+        'item_name',
         'quantity',
+        'purpose',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
