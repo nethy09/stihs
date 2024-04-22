@@ -24,10 +24,11 @@ class ItemInstanceController extends Controller
                 ->with('user')
                 ->whereNotNull('user_id')
                 ->get();
-        } else {
-            $endorsedItemInstances = ItemInstance::where('item_id', $id)
-                ->where('user_id', auth()->user()->id)
+        } elseif (auth()->user()->usertype == 'Teacher' || auth()->user()->usertype == 'User') {
+            $endorsedItemInstances = ItemInstance::where('user_id', auth()->user()->id)
                 ->get();
+        } else {
+            return redirect()->back()->with('error', 'You are not authorized to view this page');
         }
 
         $users = User::all();
@@ -82,8 +83,21 @@ class ItemInstanceController extends Controller
         return redirect()->back()->with('success', 'Item instance endorsed successfully');
     }
 
-    public function scan()
+    public function scanItem(Request $request)
     {
-        return view('individual.scan');
+        $itemInstance = ItemInstance::whereSerialNumber($request->serial_number)->first();
+
+        if ($itemInstance) {
+            return view('individual.show', compact('itemInstance'));
+        }
+
+        return redirect()->back()->with('error', 'Item instance not found');
+    }
+
+    public function endorsement()
+    {
+        $endorsedItemInstances = ItemInstance::where('user_id', auth()->user()->id)->get();
+
+        return view('items.instances.endorsed', compact('endorsedItemInstances'));
     }
 }

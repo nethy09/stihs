@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('forms', function (Blueprint $table) {
             $table->id();
-            $table->string('item_name')->nullable;
-            $table->string('quantity')->nullable();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('item_name');
+            $table->string('quantity');
+            $table->string('purpose');
             $table->timestamps();
         });
     }
