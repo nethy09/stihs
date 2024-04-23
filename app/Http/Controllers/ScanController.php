@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\scan;
+use App\Models\ItemInstance;
 use Illuminate\Http\Request;
 
 class ScanController extends Controller
@@ -63,5 +64,19 @@ class ScanController extends Controller
     public function destroy(scan $scan)
     {
         //
+    }
+
+    public function scan()
+    {
+        $serial_number = request('serial_number');
+        $item_instance = ItemInstance::with('user')->where('serial_number', $serial_number)->first();
+
+        if ($item_instance) {
+            // Return the item instance if found
+            return response()->json(['success' => true, 'item_instance' => $item_instance]);
+        } else {
+            // Handle the case where item instance is not found
+            return response()->json(['success' => false, 'message' => 'Item not found']);
+        }
     }
 }

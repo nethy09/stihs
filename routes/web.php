@@ -56,7 +56,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/instance/{id}', 'update')->name('instance.update');
         Route::delete('/instance/{id}', 'destroy')->name('instance.destroy');
         Route::put('/endorse/{id}/instance', 'endorse')->name('instance.endorse');
-        Route::get('/instance/scan', 'scan')->name('scan.barcode');
+        // Route::get('/instance/scan', 'scan')->name('scan.barcode');
     });
 
     //UsersProfileController
@@ -116,6 +116,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     //ScanController
     Route::controller(ScanController::class)->prefix('scan')->group(function () {
         Route::resource('scan', ScanController::class);
+        Route::post('/scan-barcode', 'scan')->name('scan.barcode');
     });
 });
 

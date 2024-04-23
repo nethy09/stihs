@@ -53,6 +53,13 @@
                         </ul>
                     </li>
 
+                    <li>
+                        <a href="{{ route('scan.barcode') }}" class="waves-effect" style="color: white;">
+                            <i class="ri-file-edit-line"></i>
+                            <span>Scan</span>
+                        </a>
+                    </li>
+
                     {{-- <li>
                     <a href="" class="waves-effect">
                         <i class="ri-dashboard-line"></i>
@@ -113,7 +120,7 @@
                         </li>
 
                         <li>
-                            <a href="{{ route('scan.barcode') }}" class="waves-effect" style="color: white;">
+                            <a href="{{ route('scan.index') }}" class="waves-effect" style="color: white;">
                                 <i class="ri-file-edit-line"></i>
                                 <span>Scan</span>
                             </a>
@@ -158,6 +165,13 @@
                             <a href="{{ route('form.index') }}" class="waves-effect" style="color: white;">
                                 <i class="ri-dashboard-line"></i>
                                 <span>Supply Request Form</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('scan.barcode') }}" class="waves-effect" style="color: white;">
+                                <i class="ri-file-edit-line"></i>
+                                <span>Scan</span>
                             </a>
                         </li>
 

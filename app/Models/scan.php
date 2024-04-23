@@ -12,6 +12,5 @@ class scan extends Model
     protected $fillable = [
         'serial_number',
         'item_name',
-
     ];
 }
