@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\scan;
+use App\Models\User;
 use App\Models\ItemInstance;
 use Illuminate\Http\Request;
 
@@ -13,9 +14,11 @@ class ScanController extends Controller
      */
     public function index()
     {
-        $scans = Scan::all();
+        $serial_number = request('serial_number');
+        $item_instance = ItemInstance::with('user', 'item')->where('serial_number', $serial_number)->first();
+        $users = User::all();
 
-        return view('scan.barcode', compact('scans'));
+        return view('scan.index', compact('item_instance', 'users'));
     }
 
     /**
@@ -73,7 +76,7 @@ class ScanController extends Controller
 
         if ($item_instance) {
             // Return the item instance if found
-            return response()->json(['success' => true, 'item_instance' => $item_instance]);
+            return view('scan.index', compact('item_instance'));
         } else {
             // Handle the case where item instance is not found
             return response()->json(['success' => false, 'message' => 'Item not found']);
